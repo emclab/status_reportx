@@ -1,0 +1,17 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: @erb_code %>
+  
+  <% else %>
+<%= simple_form_for @report do |f| %> 
+      <%= f.input :reported_by_name, :label => t('Reported By'), :readonly => true, :required => false, :input_html => {:value => @report.reported_by.name} %>
+      <%= f.input :report_date, :label => t('Report Date'), :as => :string, :readonly => readonly?(@report, 'report_date')%>   
+	  <%= f.input :report_from_date, :label => t('From'), :as => :string, :readonly => readonly?(@report, 'report_from_date') %>
+	  <%= f.input :report_to_date, :label => t('To'), :as => :string, :readonly => readonly?(@report, 'report_to_date') %>
+	  <%= f.input :thing_did, :label => t('Things Did'), :input_html => {:rows => 4}, :readonly => readonly?(@report, 'thing_did') %>
+      <%= f.input :last_updated_by_name, :label => t('Last Updated By'), :readonly => true, :required => false, :input_html => {:value => @report.last_updated_by.name} %>
+	  
+	  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+	  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
+<% end %>  
+
+<% end %>

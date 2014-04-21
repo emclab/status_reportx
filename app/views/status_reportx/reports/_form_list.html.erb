@@ -1,0 +1,44 @@
+ <% if @view_in_config && @erb_code %>
+  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  
+  <% else %>
+<div class="pagination"><%= will_paginate models %></div>
+    <table class="table table-striped">
+		<tr>
+			<th>#</th>
+			<th><%= t('Report Date') %></th>
+			<th><%= t('Reported By') %></th>
+			<th><%= t('From') %></th>
+			<th><%= t('To') %></th>
+			<th><%= t('Last Updated By') %></th>
+			<th></th>
+		</tr>
+		<% models.each do |r| %>
+		  <tr>
+		  	<% if has_action_right?('show_' + r.report_for, params[:controller], r) %>
+		  	  <td><%= link_to r.id, SUBURI + "/authentify/view_handler?index=1&url=#{report_path(r, :subaction => r.report_for)}"  %></td>
+		  	<% else %>
+		  	  <td><%= r.id %></td>
+		  	<% end %>
+		  	<td><%= r.report_date.strftime("%Y/%m/%d") %></td>
+		  	<td><%= prt(r, 'reported_by.name') %></td> 
+			<td><%= r.report_from_date.strftime("%Y/%m/%d") if r.report_from_date.present? %></td>
+			<td><%= r.report_to_date.strftime("%Y/%m/%d") if r.report_to_date.present? %></td>
+			<td><%= prt(r, 'last_updated_by.name') %></td>    
+			<td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape edit_report_path(r, :subaction => r.report_for)}", :class => BUTTONS_CLS['action']  if has_action_right?('update_' + r.report_for, params[:controller], r) %></td>
+		  </tr>
+		<% end %>
+	</table>
+	
+	<table class="table table-striped">
+	  <tr>
+	    <th>
+	    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
+	    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    	<%= link_to t('New Report'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI.escape new_report_path(:resource_id => @resource_id, :resource_string => @resource_string, :subaction => @report_for)}", :class => BUTTONS_CLS['action']  if @report_for && @resource_id.present? && @resource_string.present? && has_action_right?('create_' + @report_for, params[:controller]) %>
+	    </th>
+	  </tr>
+	</table>
+	
+	<% end %>
+	
