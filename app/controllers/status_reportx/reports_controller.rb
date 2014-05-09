@@ -32,6 +32,7 @@ module StatusReportx
         @report_for = params[:report][:report_for].strip if params[:report][:report_for].present?
         @resource_id = params[:report][:resource_id] if params[:report][:resource_id].present?
         @resource_string = params[:report][:resource_string].strip if params[:report][:resource_string].present?
+        @erb_code = find_config_const('report_new_view', 'status_reportx')
         flash[:notice] = t('Data Error. Not Saved!')
         render 'new'
       end
@@ -52,6 +53,7 @@ module StatusReportx
         @report_for = params[:report][:report_for].strip if params[:report][:report_for].present?
         @resource_id = params[:report][:resource_id] if params[:report][:resource_id].present?
         @resource_string = params[:report][:resource_string].strip if params[:report][:resource_string].present?
+        @erb_code = find_config_const('report_edit_view', 'status_reportx')
         flash[:notice] = t('Data Error. Not Updated!')
         render 'edit'
       end
