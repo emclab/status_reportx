@@ -3,7 +3,7 @@ StatusReportx::Engine.routes.draw do
   resources :reports do
     collection do
       get :search
-      put :search_results
+      get :search_results
     end
   end
   
