@@ -17,11 +17,6 @@ module StatusReportx
       c.should_not be_valid
     end
     
-    it "should reject nil report for" do
-      c = FactoryGirl.build(:status_reportx_report, :report_for => nil)
-      c.should_not be_valid
-    end
-    
     it "should reject nil resource_id" do
       c = FactoryGirl.build(:status_reportx_report, :resource_id => nil)
       c.should_not be_valid

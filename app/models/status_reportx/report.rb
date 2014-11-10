@@ -18,8 +18,8 @@ module StatusReportx
     belongs_to :reported_by, :class_name => 'Authentify::User'
     belongs_to :report_category, :class_name => StatusReportx.report_category_class.to_s 
     
-    validates :resource_id, :resource_string, :report_for, :report_date, :thing_did, :presence => true
-    validates :resource_id, :numericality => {:greater_than => 0}
+    validates :resource_string, :report_date, :thing_did, :presence => true
+    validates :resource_id, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
     validate :dynamic_validate 
     
     def dynamic_validate
