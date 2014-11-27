@@ -45,14 +45,11 @@ module StatusReportx
     end
   
     def update
-      @report = StatusReportx::Report.find_by_id(params[:id]) if @report.blank?
+      @report = StatusReportx::Report.find_by_id(params[:id]) 
       @report.last_updated_by_id = session[:user_id]
       if @report.update_attributes(params[:report], :as => :role_update)
         redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
       else
-        @report_for = params[:report][:report_for].strip if params[:report][:report_for].present?
-        @resource_id = params[:report][:resource_id] if params[:report][:resource_id].present?
-        @resource_string = params[:report][:resource_string].strip if params[:report][:resource_string].present?
         @erb_code = find_config_const('report_edit_view', 'status_reportx')
         flash[:notice] = t('Data Error. Not Updated!')
         render 'edit'
@@ -61,7 +58,8 @@ module StatusReportx
   
     def show
       @title = t('Report Info')
-      @report = StatusReportx::Report.find_by_id(params[:id]) if @report.blank?
+      @report = StatusReportx::Report.find_by_id(params[:id]) 
+      @report_for = @report.report_for
       @erb_code = find_config_const('report_show_view', 'status_reportx')
     end
     
@@ -71,11 +69,6 @@ module StatusReportx
       @report_for = params[:report_for].strip if params[:report_for].present?
       @resource_id = params[:resource_id] if params[:resource_id].present?
       @resource_string = params[:resource_string].strip if params[:resource_string].present?
-      #
-      @report = StatusReportx::Report.find_by_id(params[:id]) if params[:id].present?
-      @report_for = @report.report_for if params[:id].present?
-      @resource_id = @report.resource_id if params[:id].present?
-      @resource_string = @report.resource_string if params[:id].present?
     end
   end
 end

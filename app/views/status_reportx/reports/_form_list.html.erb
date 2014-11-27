@@ -35,7 +35,7 @@
 	    <th>
 	    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
 	    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    	<%= link_to t('New Report'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI.escape new_report_path(:resource_id => @resource_id, :resource_string => @resource_string, :subaction => @report_for)}", :class => BUTTONS_CLS['action']  if @report_for && @resource_id.present? && @resource_string.present? && has_action_right?('create_' + @report_for, params[:controller]) %>
+	    	<%= link_to t('New Report'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI.escape new_report_path(:resource_id => @resource_id, :resource_string => @resource_string, :report_for => @report_for, :subaction => @report_for)}", :class => BUTTONS_CLS['action']  if @report_for && @resource_id.present? && @resource_string.present? && has_action_right?('create_' + @report_for, params[:controller]) %>
 	    </th>
 	  </tr>
 	</table>
