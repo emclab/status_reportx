@@ -42,6 +42,8 @@ describe "LinkTests" do
         :sql_code => "record.last_updated_by_id == session[:user_id]")
       user_access = FactoryGirl.create(:user_access, :action => 'create_report_installation', :resource => 'commonx_logs', :role_definition_id => @role.id, :rank => 1,
       :sql_code => "")
+      user_access = FactoryGirl.create(:user_access, :action => 'destroy_installation', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "")
       
       visit '/'
       #save_and_open_page
@@ -68,6 +70,12 @@ describe "LinkTests" do
       fill_in 'report_report_date', :with => ''
       click_button 'Save'
       #save_and_open_page
+      
+      #delete
+      visit reports_path(:report_for => task.report_for)
+      #save_and_open_page
+      click_link task.id.to_s
+      page.should have_content('Delete')
       
       visit reports_path(:report_for => task.report_for)
       #save_and_open_page

@@ -63,6 +63,11 @@ module StatusReportx
       @erb_code = find_config_const('report_show_view', 'status_reportx')
     end
     
+    def destroy  
+      StatusReportx::Report.delete(params[:id].to_i)
+      redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
+    end
+    
     protected
     
     def load_record
