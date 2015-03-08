@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe "LinkTests" do
+RSpec.describe "LinkTests", type: :request do
   describe "GET /status_reportx_link_tests" do
     mini_btn = 'btn btn-mini '
     ActionView::CompiledTemplates::BUTTONS_CLS =
@@ -54,49 +54,49 @@ describe "LinkTests" do
     it "works! (now write some real specs)" do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
       task = FactoryGirl.create(:status_reportx_report, :last_updated_by_id => @u.id, :report_for => 'installation')
-      visit reports_path(:report_for => task.report_for)
+      visit status_reportx.reports_path(:report_for => task.report_for)
       #save_and_open_page
-      page.should have_content('Reports')
+      expect(page).to have_content('Reports')
       click_link 'Edit'
-      page.should have_content('Update Report')
+      expect(page).to have_content('Update Report')
       #save_and_open_page
       fill_in 'report_report_date', :with => '2014-04-19'
       click_button 'Save'
       #with wrong data
-      visit reports_path(:report_for => task.report_for)
+      visit status_reportx.reports_path(:report_for => task.report_for)
       #save_and_open_page
-      page.should have_content('Reports')
+      expect(page).to have_content('Reports')
       click_link 'Edit'
       fill_in 'report_report_date', :with => ''
       click_button 'Save'
       #save_and_open_page
       
       #delete
-      visit reports_path(:report_for => task.report_for)
+      visit status_reportx.reports_path(:report_for => task.report_for)
       #save_and_open_page
       click_link task.id.to_s
-      page.should have_content('Delete')
+      expect(page).to have_content('Delete')
       
-      visit reports_path(:report_for => task.report_for)
+      visit status_reportx.reports_path(:report_for => task.report_for)
       #save_and_open_page
       click_link task.id.to_s
       #save_and_open_page
-      page.should have_content('Report Info')
+      expect(page).to have_content('Report Info')
       click_link 'New Log'
       #save_and_open_page
-      page.should have_content('Log')
+      expect(page).to have_content('Log')
       
-      visit new_report_path(:report_for => task.report_for, :resource_id => 1, :resource_string => 'projectx/projects', :subaction => task.report_for)
+      visit status_reportx.new_report_path(:report_for => task.report_for, :resource_id => 1, :resource_string => 'projectx/projects', :subaction => task.report_for)
       #save_and_open_page
-      page.should have_content('New Report')
+      expect(page).to have_content('New Report')
       fill_in 'report_report_date', :with => Date.today
       fill_in 'report_thing_did', :with => 'a test spec'
       click_button 'Save'
       save_and_open_page
       #with wrong data
-      visit new_report_path(:report_for => task.report_for, :resource_id => 1, :resource_string => 'projectx/projects', :subaction => task.report_for)
+      visit status_reportx.new_report_path(:report_for => task.report_for, :resource_id => 1, :resource_string => 'projectx/projects', :subaction => task.report_for)
       save_and_open_page
-      page.should have_content('New Report')
+      expect(page).to have_content('New Report')
       fill_in 'report_report_date', :with => Date.today
       fill_in 'report_thing_did', :with => ''
       click_button 'Save'

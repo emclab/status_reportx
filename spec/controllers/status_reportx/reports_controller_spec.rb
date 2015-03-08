@@ -1,10 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module StatusReportx
-  describe ReportsController do
+  RSpec.describe ReportsController, type: :controller do
+    routes {StatusReportx::Engine.routes}
     before(:each) do
-      controller.should_receive(:require_signin)
-      controller.should_receive(:require_employee)
+      expect(controller).to receive(:require_signin)
+      expect(controller).to receive(:require_employee)
            
     end
     
@@ -31,8 +32,8 @@ module StatusReportx
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'supplied_partx/parts')
         task1 = FactoryGirl.create(:status_reportx_report,  :resource_id => 2, :resource_string => 'sourced_partx/parts' )
-        get 'index', {:use_route => :status_reportx}
-        assigns[:reports].should =~ [task, task1]
+        get 'index'
+        expect(assigns(:reports)).to match_array([task, task1])
       end
       
       it "should return reports for report_for" do
@@ -42,8 +43,8 @@ module StatusReportx
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :report_for => 'installation')
         task1 = FactoryGirl.create(:status_reportx_report, :report_for => 'not_installatin')
-        get 'index', {:use_route => :status_reportx, :report_for => 'installation'}
-        assigns[:reports].should =~ [task]
+        get 'index', {:report_for => 'installation'}
+        expect(assigns(:reports)).to match_array([task])
       end
       
       it "should return reports for the resource_strng & subaction" do
@@ -53,8 +54,8 @@ module StatusReportx
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'supplied_partx/parts')
         task1 = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'sourced_partx/parts' )
-        get 'index', {:use_route => :status_reportx, :subaction => 'supplied_part'}
-        assigns[:reports].should =~ [task, task1]
+        get 'index', {:subaction => 'supplied_part'}
+        expect(assigns(:reports)).to match_array([task, task1])
       end
       
       it "should only return supplied part reports" do
@@ -64,8 +65,8 @@ module StatusReportx
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'sourced_partx/parts')
         task1 = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
-        get 'index', {:use_route => :status_reportx, :resource_string => 'supplied_partx/parts'}
-        assigns[:reports].should =~ [task1]
+        get 'index', {:resource_string => 'supplied_partx/parts'}
+        expect(assigns(:reports)).to match_array([task1])
       end
       
       it "should only return reports which belongs to :report_for" do
@@ -75,8 +76,8 @@ module StatusReportx
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts', :report_for => 'prod')
         task1 = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'sourced_partx/parts', :report_for => 'inst')
-        get 'index', {:use_route => :status_reportx,  :report_for => 'prod'}
-        assigns[:reports].should =~ [task]
+        get 'index', { :report_for => 'prod'}
+        expect(assigns(:reports)).to match_array([task])
       end
       
       it "should only return reportts of sourced part and id" do
@@ -86,8 +87,8 @@ module StatusReportx
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'sourced_partx/parts')
         task1 = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
-        get 'index', {:use_route => :status_reportx, :resource_id => 1, :resource_string => 'supplied_partx/parts'}
-        assigns[:reports].should =~ [task1]
+        get 'index', {:resource_id => 1, :resource_string => 'supplied_partx/parts'}
+        expect(assigns(:reports)).to match_array([task1])
       end
             
     end
@@ -98,8 +99,8 @@ module StatusReportx
         :sql_code => "")
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        get 'new', {:use_route => :status_reportx,  :resource_id => 1, :resource_string => 'supplied_partx/parts'}
-        response.should be_success
+        get 'new', { :resource_id => 1, :resource_string => 'supplied_partx/parts'}
+        expect(response).to be_success
       end
       
       it "should bring up new page for subaction" do
@@ -107,8 +108,8 @@ module StatusReportx
         :sql_code => "")
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        get 'new', {:use_route => :status_reportx,  :resource_id => 1, :resource_string => 'supplied_partx/parts', :subaction => 'supplied_partx'}
-        response.should be_success
+        get 'new', { :resource_id => 1, :resource_string => 'supplied_partx/parts', :subaction => 'supplied_partx'}
+        expect(response).to be_success
       end
       
     end
@@ -120,8 +121,8 @@ module StatusReportx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.attributes_for(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts' )  
-        get 'create', {:use_route => :status_reportx, :report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts'}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        get 'create', {:report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts'}
+        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
       end
       
       it "should render 'new' if data error" do        
@@ -130,8 +131,8 @@ module StatusReportx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.attributes_for(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts', :report_date => nil)
-        get 'create', {:use_route => :status_reportx, :report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts', :report_for => 'install'}
-        response.should render_template('new')
+        get 'create', {:report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts', :report_for => 'install'}
+        expect(response).to render_template('new')
       end
       
       it "should create for subaction and redirect after successful creation" do
@@ -140,8 +141,8 @@ module StatusReportx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.attributes_for(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts' )  
-        get 'create', {:use_route => :status_reportx, :report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts', :subaction => 'supplied_partx'}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        get 'create', {:report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts', :subaction => 'supplied_partx'}
+        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
       end
     end
   
@@ -152,8 +153,8 @@ module StatusReportx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
-        get 'edit', {:use_route => :status_reportx, :id => task.id}
-        response.should be_success
+        get 'edit', {:id => task.id}
+        expect(response).to be_success
       end
       
     end
@@ -165,8 +166,8 @@ module StatusReportx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
-        get 'update', {:use_route => :status_reportx, :id => task.id, :report => {:report_date => '2013-01-01'}}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        get 'update', {:id => task.id, :report => {:report_date => '2013-01-01'}}
+        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
       end
       
       it "should render edit with data error" do
@@ -175,8 +176,8 @@ module StatusReportx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
-        get 'update', {:use_route => :status_reportx, :id => task.id, :report => {:report_date => ''}}
-        response.should render_template('edit')
+        get 'update', {:id => task.id, :report => {:report_date => ''}}
+        expect(response).to render_template('edit')
       end
     end
   
@@ -187,8 +188,8 @@ module StatusReportx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
-        get 'show', {:use_route => :status_reportx, :id => task.id}
-        response.should be_success
+        get 'show', {:id => task.id}
+        expect(response).to be_success
       end
     end
   end
