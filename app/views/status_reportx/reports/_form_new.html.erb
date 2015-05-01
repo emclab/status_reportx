@@ -2,18 +2,39 @@
   <%= render inline: @erb_code %>
   
   <% else %>
-<%= simple_form_for @report do |f| %>    
+<div class="container">
+  <div class="page-header clearfix">
+    <div class="pull-left">
+    <h2><%=@title%></h2>
+    </div>
+  </div>
+<%= simple_form_for @report, html: { class: 'form-horizontal col-sm-' + BUTTONS_CLS['form-span#'] },
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean
+  } do |f| %>
+  
+      <div class="form-inputs">  
 	  <%= f.input :report_date, :label => t('Report Date'), :as => :string %>
-      <%= f.input :thing_did, :label => t('Things Did'), :input_html => {:rows => 4} %>
+          <%= f.input :thing_did, :label => t('Report'), :input_html => {:rows => 4} %>
 	  <%= f.input :report_from_date, :label => t('From'), :as => :string %>
 	  <%= f.input :report_to_date, :label => t('To'), :as => :string %>
 	  <%= f.input :report_for, :as => :hidden, :input_html => {:value => @report_for} %>
 	  <%= f.input :resource_id, :as => :hidden, :input_html => {:value => @resource_id} %>
 	  <%= f.input :resource_string, :as => :hidden, :input_html => {:value => @resource_string} %>
 	  
-	  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-	  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
+	  <div class="form-actions col-sm-offset-<%=BUTTONS_CLS['offset#']%>" >
+            <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+            <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>    
+         </div> 
+
+  </div>
+ 
 <% end %>
-  
+
+</div>
 <% end%>
 

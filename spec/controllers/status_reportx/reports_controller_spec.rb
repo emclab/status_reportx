@@ -20,6 +20,7 @@ module StatusReportx
       ul = FactoryGirl.build(:user_level, :sys_user_group_id => ug.id)
       @u = FactoryGirl.create(:user, :user_levels => [ul], :user_roles => [ur])
       
+      session[:user_role_ids] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id).user_role_ids
     end
     
     render_views
@@ -29,7 +30,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "StatusReportx::Report.order('id DESC')")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'supplied_partx/parts')
         task1 = FactoryGirl.create(:status_reportx_report,  :resource_id => 2, :resource_string => 'sourced_partx/parts' )
         get 'index'
@@ -40,7 +40,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "StatusReportx::Report.order('id DESC')")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :report_for => 'installation')
         task1 = FactoryGirl.create(:status_reportx_report, :report_for => 'not_installatin')
         get 'index', {:report_for => 'installation'}
@@ -51,7 +50,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'index_supplied_part', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "StatusReportx::Report.order('id DESC')")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'supplied_partx/parts')
         task1 = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'sourced_partx/parts' )
         get 'index', {:subaction => 'supplied_part'}
@@ -62,7 +60,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "StatusReportx::Report.order('id DESC')")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'sourced_partx/parts')
         task1 = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
         get 'index', {:resource_string => 'supplied_partx/parts'}
@@ -73,7 +70,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "StatusReportx::Report.order('id DESC')")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts', :report_for => 'prod')
         task1 = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'sourced_partx/parts', :report_for => 'inst')
         get 'index', { :report_for => 'prod'}
@@ -84,7 +80,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "StatusReportx::Report.order('id DESC')")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report,  :resource_id => 1, :resource_string => 'sourced_partx/parts')
         task1 = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
         get 'index', {:resource_id => 1, :resource_string => 'supplied_partx/parts'}
@@ -98,7 +93,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         get 'new', { :resource_id => 1, :resource_string => 'supplied_partx/parts'}
         expect(response).to be_success
       end
@@ -107,7 +101,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'create_supplied_partx', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         get 'new', { :resource_id => 1, :resource_string => 'supplied_partx/parts', :subaction => 'supplied_partx'}
         expect(response).to be_success
       end
@@ -119,7 +112,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.attributes_for(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts' )  
         get 'create', {:report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts'}
         expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
@@ -129,7 +121,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.attributes_for(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts', :report_date => nil)
         get 'create', {:report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts', :report_for => 'install'}
         expect(response).to render_template('new')
@@ -139,7 +130,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'create_supplied_partx', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.attributes_for(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts' )  
         get 'create', {:report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts', :subaction => 'supplied_partx'}
         expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
@@ -151,7 +141,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
         get 'edit', {:id => task.id}
         expect(response).to be_success
@@ -164,7 +153,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
         get 'update', {:id => task.id, :report => {:report_date => '2013-01-01'}}
         expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
@@ -174,7 +162,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
         get 'update', {:id => task.id, :report => {:report_date => ''}}
         expect(response).to render_template('edit')
@@ -186,7 +173,6 @@ module StatusReportx
         user_access = FactoryGirl.create(:user_access, :action => 'show', :resource =>'status_reportx_reports', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "record.reported_by_id == session[:user_id]")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
         get 'show', {:id => task.id}
         expect(response).to be_success

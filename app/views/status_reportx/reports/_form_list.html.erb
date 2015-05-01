@@ -3,16 +3,27 @@
   
   <% else %>
 <div class="pagination"><%= will_paginate models %></div>
-    <table class="table table-striped">
+<div class="container-fluid">
+        <div class="page-header clearfix">
+          <div class="pull-left">
+            <h2><%=@title%></h2>
+          </div>
+        </div>
+      <table class="table table-hover">
+              <thead>
 		<tr>
 			<th>#</th>
 			<th><%= t('Report Date') %></th>
 			<th><%= t('Reported By') %></th>
-			<th><%= t('From') %></th>
+			<th><%= t('Report') %></th>
+                                                 <th><%= t('From') %></th>
 			<th><%= t('To') %></th>
 			<th><%= t('Last Updated By') %></th>
 			<th></th>
-		</tr>
+                        <th></th>
+	  	</tr>
+                </thead>
+                <tbody>
 		<% models.each do |r| %>
 		  <tr>
 		  	<% if has_action_right?('show_' + r.report_for, params[:controller], r) %>
@@ -22,23 +33,22 @@
 		  	<% end %>
 		  	<td><%= r.report_date.strftime("%Y/%m/%d") %></td>
 		  	<td><%= prt(r, 'reported_by.name') %></td> 
+			<td><%= simple_format(h r.thing_did[0..255]) %></td> 
 			<td><%= r.report_from_date.strftime("%Y/%m/%d") if r.report_from_date.present? %></td>
 			<td><%= r.report_to_date.strftime("%Y/%m/%d") if r.report_to_date.present? %></td>
 			<td><%= prt(r, 'last_updated_by.name') %></td>    
+            <td><%= link_to '日志报告便签', SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(commonx.logs_path(:resource_name => 'status_reportx/reports', :resource_id => r.id, :subaction => 'status_report'))}" if has_action_right?('index_status_report', 'commonx/logs') %></td>
 			<td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape edit_report_path(r, :subaction => r.report_for)}", :class => BUTTONS_CLS['action']  if has_action_right?('update_' + r.report_for, params[:controller], r) %></td>
 		  </tr>
 		<% end %>
-	</table>
+	  </tbody>
+       </table>
 	
-	<table class="table table-striped">
-	  <tr>
-	    <th>
-	    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
-	    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<div class="btn-toolbar">
+	   	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
 	    	<%= link_to t('New Report'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI.escape new_report_path(:resource_id => @resource_id, :resource_string => @resource_string, :report_for => @report_for, :subaction => @report_for)}", :class => BUTTONS_CLS['action']  if @report_for && @resource_id.present? && @resource_string.present? && has_action_right?('create_' + @report_for, params[:controller]) %>
-	    </th>
-	  </tr>
-	</table>
+	</div>
+</div>
 	
-	<% end %>
+<% end %>
 	

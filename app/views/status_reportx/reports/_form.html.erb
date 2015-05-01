@@ -2,16 +2,37 @@
   <%= render inline: @erb_code %>
   
   <% else %>
-<%= simple_form_for @report do |f| %> 
-      <%= f.input :reported_by_name, :label => t('Reported By'), :readonly => true, :required => false, :input_html => {:value => @report.reported_by.name} %>
-      <%= f.input :report_date, :label => t('Report Date'), :as => :string, :readonly => readonly?(@report, 'report_date')%>   
+<div class="container">
+  <div class="page-header clearfix">
+    <div class="pull-left">
+    <h2><%=@title%></h2>
+    </div>
+  </div>
+<%= simple_form_for @report, html: { class: 'form-horizontal col-sm-' + BUTTONS_CLS['form-span#'] },
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean } do |f| %>
+  
+  <div class="form-inputs"> 
+          <%= f.input :reported_by_name, :label => t('Reported By'), :readonly => true, :required => false, :input_html => {:value => @report.reported_by.name} %>
+          <%= f.input :report_date, :label => t('Report Date'), :as => :string, :readonly => readonly?(@report, 'report_date')%>   
 	  <%= f.input :report_from_date, :label => t('From'), :as => :string, :readonly => readonly?(@report, 'report_from_date') %>
 	  <%= f.input :report_to_date, :label => t('To'), :as => :string, :readonly => readonly?(@report, 'report_to_date') %>
-	  <%= f.input :thing_did, :label => t('Things Did'), :input_html => {:rows => 4}, :readonly => readonly?(@report, 'thing_did') %>
-      <%= f.input :last_updated_by_name, :label => t('Last Updated By'), :readonly => true, :required => false, :input_html => {:value => @report.last_updated_by.name} %>
+	  <%= f.input :thing_did, :label => t('Report'), :input_html => {:rows => 4}, :readonly => readonly?(@report, 'thing_did') %>
+          <%= f.input :last_updated_by_name, :label => t('Last Updated By'), :readonly => true, :required => false, :input_html => {:value => @report.last_updated_by.name} %>
 	  
-	  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-	  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
-<% end %>  
+	  <div class="form-actions col-sm-offset-<%=BUTTONS_CLS['offset#']%>" >
+              <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+              <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>
+         </div> 
+  
+    </div>
+ 
+<% end %>
+
+</div>
 
 <% end %>
