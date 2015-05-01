@@ -85,8 +85,7 @@ module StatusReportx
     
     def update_params
       params.require(:report).permit(:issue_to_solve, :last_updated_by_id, :report_category_id, :report_date, :report_to_date, :report_from_date, :reported_by_id, 
-                    :status_update, :thing_did, :thing_to_do, :wf_state, :report_category_name, :report_category_name, :reported_by_name,
-                    :last_updated_by_name)
+                    :status_update, :thing_did, :thing_to_do, :wf_state)
     end
   end
 end
