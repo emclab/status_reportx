@@ -23,7 +23,7 @@ module StatusReportx
     end
   
     def create
-      @report = StatusReportx::Report.new(params[:report], :as => :role_new)
+      @report = StatusReportx::Report.new(new_params)
       @report.last_updated_by_id = session[:user_id]
       @report.reported_by_id = session[:user_id]
       if @report.save
@@ -47,7 +47,7 @@ module StatusReportx
     def update
       @report = StatusReportx::Report.find_by_id(params[:id]) 
       @report.last_updated_by_id = session[:user_id]
-      if @report.update_attributes(params[:report], :as => :role_update)
+      if @report.update_attributes(update_params)
         redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
       else
         @erb_code = find_config_const('report_edit_view', 'status_reportx')
@@ -74,6 +74,19 @@ module StatusReportx
       @report_for = params[:report_for].strip if params[:report_for].present?
       @resource_id = params[:resource_id] if params[:resource_id].present?
       @resource_string = params[:resource_string].strip if params[:resource_string].present?
+    end
+    
+    private
+    
+    def new_params
+      params.require(:report).permit(:issue_to_solve, :last_updated_by_id, :report_category_id, :report_date, :report_to_date, :report_from_date, :reported_by_id, 
+                    :resource_id, :resource_string, :status_update, :thing_did, :thing_to_do, :wf_state, :report_for)
+    end
+    
+    def update_params
+      params.require(:report).permit(:issue_to_solve, :last_updated_by_id, :report_category_id, :report_date, :report_to_date, :report_from_date, :reported_by_id, 
+                    :status_update, :thing_did, :thing_to_do, :wf_state, :report_category_name, :report_category_name, :reported_by_name,
+                    :last_updated_by_name)
     end
   end
 end

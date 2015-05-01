@@ -1,5 +1,5 @@
 # Use this setup block to configure all options available in SimpleForm.
-require 'simple_form'
+#require 'simple_form'
 SimpleForm.setup do |config|
   config.error_notification_class = 'alert alert-danger'
   config.button_class = 'btn btn-default'
