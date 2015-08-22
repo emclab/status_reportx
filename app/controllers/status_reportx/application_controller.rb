@@ -5,6 +5,7 @@ module StatusReportx
     include Authentify::UsersHelper
     include Authentify::UserPrivilegeHelper
     include Commonx::CommonxHelper
+    include Searchx::SearchHelper
     
     before_action :require_signin
     before_action :max_pagination 
@@ -23,7 +24,7 @@ module StatusReportx
       @view_in_config = Authentify::AuthentifyUtility.load_view_in_config
     end
     
-    def return_resources_by_access_right(resource_string)  #purchase_orderx_orders     
+    def return_resources_by_access_right(resource_string)  #purchase_orderx_orders
       access_rights, model_ar_r, has_record_access = access_right_finder('index', resource_string, session[:user_role_ids])
       return [] if access_rights.blank?
       return model_ar_r #instance_eval(access_rights.sql_code) #.present?

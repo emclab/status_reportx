@@ -11,6 +11,7 @@ module StatusReportx
       @reports = @reports.where('TRIM(status_reportx_reports.report_for) = ?', @report_for) if @report_for
       @reports = @reports.where('status_reportx_reports.resource_id = ?', @resource_id) if @resource_id 
       @reports = @reports.where('TRIM(status_reportx_reports.resource_string) = ?', @resource_string) if @resource_string
+      @reports = @reports.where('status_reportx_reports.reported_by_id = ?', @reporter_id) if @reporter_id
       @reports = @reports.where('status_reportx_reports.report_category_id = ?', params[:report_category_id]) if params[:report_category_id].present?
       @reports = @reports.page(params[:page]).per_page(@max_pagination) 
       @erb_code = find_config_const('report_index_view', 'status_reportx')
@@ -74,6 +75,7 @@ module StatusReportx
       @report_for = params[:report_for].strip if params[:report_for].present?
       @resource_id = params[:resource_id] if params[:resource_id].present?
       @resource_string = params[:resource_string].strip if params[:resource_string].present?
+      @reporter_id = params[:reported_by_id].to_i if params[:reporter_by_id]
     end
     
     private
