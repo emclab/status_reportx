@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   mount StatusReportx::Engine => "/status_reportx"
   mount Commonx::Engine => "/commonx"
   mount Authentify::Engine => '/authentify'
-  
+  mount Searchx::Engine => '/search'
   
   root :to => "authentify/sessions#new"
   get '/signin',  :to => 'authentify/sessions#new'

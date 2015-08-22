@@ -14,6 +14,7 @@ gem 'factory_girl_rails' #rails 4.2
 
 gem 'authentify', :path => '../authentify'  #for rspec test
 gem 'commonx', :path => '../commonx'
+gem 'searchx', :path => '../searchx'
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
