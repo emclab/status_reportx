@@ -19,7 +19,7 @@ class CreateStatusReportxReports < ActiveRecord::Migration
       t.timestamps
     end
     
-    add_index :status_reportx_reports, [:resource_id, :resource_string]
+    add_index :status_reportx_reports, [:resource_id, :resource_string], :name => :report_resource_id_n_string
     add_index :status_reportx_reports, :resource_id
     add_index :status_reportx_reports, :resource_string
     add_index :status_reportx_reports, :report_category_id
