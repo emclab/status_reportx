@@ -7,6 +7,6 @@ $(function() {
 });
 
 $(function() {
-	$("#report_start_date_s").datepicker({dateFormat: 'yy-mm-dd'});
-    $("#report_end_date_s").datepicker({dateFormat: 'yy-mm-dd'});
+	$("#start_date_s").datepicker({dateFormat: 'yy-mm-dd'});
+    $("#end_date_s").datepicker({dateFormat: 'yy-mm-dd'});
 });
