@@ -15,5 +15,6 @@ FactoryGirl.define do
     report_to_date "2014-04-18"
     report_category_id 1
     report_for 'installation'
+    fort_token '123456789'
   end
 end

@@ -21,6 +21,7 @@ module StatusReportx
       @u = FactoryGirl.create(:user, :user_levels => [ul], :user_roles => [ur])
       
       session[:user_role_ids] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id).user_role_ids
+      session[:fort_token] = @u.fort_token
     end
     
     render_views
@@ -114,7 +115,7 @@ module StatusReportx
         session[:user_id] = @u.id
         task = FactoryGirl.attributes_for(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts' )  
         get 'create', {:report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts'}
-        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Saved!")
       end
       
       it "should render 'new' if data error" do        
@@ -132,7 +133,7 @@ module StatusReportx
         session[:user_id] = @u.id
         task = FactoryGirl.attributes_for(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts' )  
         get 'create', {:report => task, :resource_id => 1, :resource_string => 'supplied_partx/parts', :subaction => 'supplied_partx'}
-        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Saved!")
       end
     end
   
@@ -155,7 +156,7 @@ module StatusReportx
         session[:user_id] = @u.id
         task = FactoryGirl.create(:status_reportx_report, :resource_id => 1, :resource_string => 'supplied_partx/parts')
         get 'update', {:id => task.id, :report => {:report_date => '2013-01-01'}}
-        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Updated!")
       end
       
       it "should render edit with data error" do

@@ -14,26 +14,27 @@ module StatusReportx
       @reports = @reports.where('status_reportx_reports.reported_by_id = ?', @reporter_id) if @reporter_id
       @reports = @reports.where('status_reportx_reports.report_category_id = ?', params[:report_category_id]) if params[:report_category_id].present?
       @reports = @reports.page(params[:page]).per_page(@max_pagination) 
-      @erb_code = find_config_const('report_index_view', 'status_reportx')
+      @erb_code = find_config_const('report_index_view', session[:fort_token], 'status_reportx')
     end
   
     def new
       @title = t('New Report')
       @report = StatusReportx::Report.new()
-      @erb_code = find_config_const('report_new_view', 'status_reportx')
+      @erb_code = find_config_const('report_new_view', session[:fort_token], 'status_reportx')
     end
   
     def create
       @report = StatusReportx::Report.new(new_params)
       @report.last_updated_by_id = session[:user_id]
+      @report.fort_token = session[:fort_token]
       @report.reported_by_id = session[:user_id]
       if @report.save
-        redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Saved!")
       else
         @report_for = params[:report][:report_for].strip if params[:report][:report_for].present?
         @resource_id = params[:report][:resource_id] if params[:report][:resource_id].present?
         @resource_string = params[:report][:resource_string].strip if params[:report][:resource_string].present?
-        @erb_code = find_config_const('report_new_view', 'status_reportx')
+        @erb_code = find_config_const('report_new_view', session[:fort_token], 'status_reportx')
         flash[:notice] = t('Data Error. Not Saved!')
         render 'new'
       end
@@ -42,16 +43,16 @@ module StatusReportx
     def edit
       @title = t('Update Report')
       @report = StatusReportx::Report.find_by_id(params[:id]) if @report.blank?
-      @erb_code = find_config_const('report_edit_view', 'status_reportx')
+      @erb_code = find_config_const('report_edit_view', session[:fort_token], 'status_reportx')
     end
   
     def update
       @report = StatusReportx::Report.find_by_id(params[:id]) 
       @report.last_updated_by_id = session[:user_id]
       if @report.update_attributes(update_params)
-        redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Updated!")
       else
-        @erb_code = find_config_const('report_edit_view', 'status_reportx')
+        @erb_code = find_config_const('report_edit_view', session[:fort_token], 'status_reportx')
         flash[:notice] = t('Data Error. Not Updated!')
         render 'edit'
       end
@@ -61,12 +62,12 @@ module StatusReportx
       @title = t('Report Info')
       @report = StatusReportx::Report.find_by_id(params[:id]) 
       @report_for = @report.report_for
-      @erb_code = find_config_const('report_show_view', 'status_reportx')
+      @erb_code = find_config_const('report_show_view', session[:fort_token], 'status_reportx')
     end
     
     def destroy  
       StatusReportx::Report.delete(params[:id].to_i)
-      redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
+      redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Deleted!")
     end
     
     protected
