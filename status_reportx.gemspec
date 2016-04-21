@@ -7,11 +7,11 @@ require "status_reportx/version"
 Gem::Specification.new do |s|
   s.name        = "status_reportx"
   s.version     = StatusReportx::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of StatusReportx."
-  s.description = "TODO: Description of StatusReportx."
+  s.authors     = ["Your name"]
+  s.email       = ["Your@email.com"]
+  s.homepage    = "http://home.com"
+  s.summary     = "Summary of StatusReportx."
+  s.description = "Description of StatusReportx."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
