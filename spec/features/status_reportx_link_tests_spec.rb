@@ -61,6 +61,9 @@ RSpec.describe "LinkTests", type: :request do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
       task = FactoryGirl.create(:status_reportx_report, :last_updated_by_id => @u.id, :report_for => 'installation')
       visit status_reportx.reports_path(:report_for => task.report_for)
+      expect(Authentify::SysLog.all.count).to eq(1)
+      expect(Authentify::SysLog.all.first.resource).to eq('status_reportx/reports')
+      expect(Authentify::SysLog.all.first.user_id).to eq(@u.id)
       #save_and_open_page
       expect(page).to have_content('Reports')
       click_link 'Edit'
